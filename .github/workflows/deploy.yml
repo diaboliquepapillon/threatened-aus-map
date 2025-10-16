@@ -28,12 +28,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Copy data and asset files
+      - name: Copy data files
         run: |
           cp public/australia.json dist/
           cp public/threatened_species.csv dist/
-          cp -r js dist/
-          cp -r css dist/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
