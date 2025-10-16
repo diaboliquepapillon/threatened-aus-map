@@ -12,11 +12,16 @@ export const VegaLiteChart = ({ spec, className = "" }: VegaLiteChartProps) => {
   useEffect(() => {
     if (containerRef.current) {
       vegaEmbed(containerRef.current, spec, {
-        actions: false,
+        actions: {
+          export: true,
+          source: false,
+          compiled: false,
+          editor: false,
+        },
         renderer: 'svg',
       });
     }
   }, [spec]);
 
-  return <div ref={containerRef} className={className} />;
+  return <div ref={containerRef} className={className} style={{ width: '100%' }} />;
 };

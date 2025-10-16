@@ -25,83 +25,78 @@ const Index = () => {
   // Choropleth Map Specification
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 700,
-    height: 450,
+    width: 600,
+    height: 400,
     title: {
       text: 'Threatened Species Count by State',
-      fontSize: 20,
+      fontSize: 18,
       font: 'Inter',
       fontWeight: 600,
-      color: '#3d2817',
+      color: '#4b6043',
     },
-    layer: [
+    data: {
+      url: '/australia.json',
+      format: {
+        type: 'topojson',
+        feature: 'states',
+      },
+    },
+    transform: [
       {
-        data: {
-          url: '/australia.json',
-          format: {
-            type: 'topojson',
-            feature: 'states',
-          },
+        lookup: 'properties.STATE_NAME',
+        from: {
+          data: { url: '/threatened_species.csv' },
+          key: 'state',
+          fields: ['state', 'count', 'group'],
         },
-        transform: [
-          {
-            lookup: 'properties.STATE_NAME',
-            from: {
-              data: {
-                url: '/threatened_species.csv',
-              },
-              key: 'state',
-              fields: ['count', 'group'],
-            },
-          },
-          ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-          {
-            aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-            groupby: ['properties.STATE_NAME'],
-          },
-        ],
-        mark: {
-          type: 'geoshape',
-          stroke: '#8b6f47',
-          strokeWidth: 1.5,
-          cursor: 'pointer',
-        },
-        encoding: {
-          color: {
-            field: 'total_count',
-            type: 'quantitative',
-            scale: {
-              scheme: 'oranges',
-              domain: [0, 800],
-            },
-            legend: {
-              title: 'Species Count',
-              titleFont: 'Inter',
-              labelFont: 'Inter',
-              orient: 'right',
-            },
-          },
-          tooltip: [
-            { field: 'properties.STATE_NAME', type: 'nominal', title: 'State' },
-            { field: 'total_count', type: 'quantitative', title: 'Threatened Species' },
-          ],
-        },
+      },
+      ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
+      {
+        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
+        groupby: ['properties.STATE_NAME'],
       },
     ],
     projection: {
       type: 'mercator',
+      center: [133, -28],
+      scale: 800,
+    },
+    mark: {
+      type: 'geoshape',
+      stroke: '#4b6043',
+      strokeWidth: 1.5,
+    },
+    encoding: {
+      color: {
+        field: 'total_count',
+        type: 'quantitative',
+        scale: {
+          scheme: 'oranges',
+          domain: [0, 800],
+        },
+        legend: {
+          title: 'Threatened Species',
+          titleFont: 'Inter',
+          titleFontSize: 12,
+          labelFont: 'Inter',
+          labelFontSize: 11,
+        },
+      },
+      tooltip: [
+        { field: 'properties.STATE_NAME', type: 'nominal', title: 'State' },
+        { field: 'total_count', type: 'quantitative', title: 'Count', format: ',.0f' },
+      ],
     },
     config: {
-      view: { stroke: null },
-      background: '#f7f4ef',
+      background: 'transparent',
     },
   };
 
   // Bar Chart Specification
   const barSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 700,
-    height: 300,
+    width: 600,
+    height: 350,
     title: {
       text: selectedState
         ? `Threat Categories in ${stateNameMap[selectedState] || selectedState}`
@@ -109,7 +104,7 @@ const Index = () => {
       fontSize: 18,
       font: 'Inter',
       fontWeight: 600,
-      color: '#3d2817',
+      color: '#4b6043',
     },
     data: {
       url: '/threatened_species.csv',
@@ -165,8 +160,11 @@ const Index = () => {
       ],
     },
     config: {
-      view: { stroke: null },
-      background: '#ffffff',
+      background: 'transparent',
+      axis: {
+        grid: true,
+        gridColor: '#e5e5e5',
+      },
     },
   };
 
