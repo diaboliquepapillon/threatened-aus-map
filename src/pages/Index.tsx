@@ -35,8 +35,8 @@ const Index = () => {
   // Choropleth Map Specification (TopoJSON + CSV join)
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
-    width: 600,
-    height: 420,
+    width: 'container',
+    height: 400,
     title: {
       text: 'Australia - Threatened Species Map',
       fontSize: 18,
@@ -120,8 +120,8 @@ const Index = () => {
   // Bar Chart Specification
   const barSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 600,
-    height: 350,
+    width: 'container',
+    height: 320,
     title: {
       text: selectedState
         ? `Threat Categories in ${stateNameMap[selectedState] || selectedState}`

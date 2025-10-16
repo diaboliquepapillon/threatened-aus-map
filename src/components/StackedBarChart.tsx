@@ -8,8 +8,8 @@ interface StackedBarChartProps {
 export const StackedBarChart = ({ selectedGroup, selectedStateName }: StackedBarChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 550,
-    height: 350,
+    width: 'container',
+    height: 320,
     title: {
       text: 'Threat Level Composition by State',
       fontSize: 18,

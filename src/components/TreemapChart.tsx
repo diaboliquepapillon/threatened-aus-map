@@ -8,8 +8,8 @@ interface TreemapChartProps {
 export const TreemapChart = ({ selectedGroup, selectedStateName }: TreemapChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 550,
-    height: 350,
+    width: 'container',
+    height: 320,
     title: {
       text: 'Species Distribution: Group × Status',
       fontSize: 18,

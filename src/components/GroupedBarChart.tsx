@@ -8,8 +8,8 @@ interface GroupedBarChartProps {
 export const GroupedBarChart = ({ selectedGroup, selectedStateName }: GroupedBarChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 550,
-    height: 350,
+    width: 'container',
+    height: 320,
     title: {
       text: selectedStateName 
         ? `Animal Groups in ${selectedStateName}` 
