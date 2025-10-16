@@ -6,6 +6,18 @@ const Index = () => {
   const [selectedGroup, setSelectedGroup] = useState<string>('All');
   const [selectedState, setSelectedState] = useState<string | null>(null);
 
+  // State name mapping
+  const stateNameMap: Record<string, string> = {
+    'NSW': 'New South Wales',
+    'VIC': 'Victoria',
+    'QLD': 'Queensland',
+    'WA': 'Western Australia',
+    'SA': 'South Australia',
+    'TAS': 'Tasmania',
+    'NT': 'Northern Territory',
+    'ACT': 'Australian Capital Territory',
+  };
+
   // Choropleth Map Specification
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -24,7 +36,7 @@ const Index = () => {
           url: '/australia.json',
           format: {
             type: 'topojson',
-            feature: 'austates',
+            feature: 'states',
           },
         },
         transform: [
@@ -56,7 +68,7 @@ const Index = () => {
             type: 'quantitative',
             scale: {
               scheme: 'oranges',
-              domain: [0, 400],
+              domain: [0, 800],
             },
             legend: {
               title: 'Species Count',
@@ -99,7 +111,7 @@ const Index = () => {
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      ...(selectedState ? [{ filter: `datum.state == '${selectedState}'` }] : []),
+      ...(selectedState ? [{ filter: `datum.state == '${stateNameMap[selectedState]}'` }] : []),
       {
         aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
         groupby: ['status'],
