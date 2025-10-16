@@ -221,13 +221,39 @@ const Index = () => {
       {/* Insights */}
       <section className="container mx-auto px-8 py-8 max-w-6xl">
         <div className="bg-accent/10 rounded-lg p-6 border-l-4 border-accent">
-          <h2 className="text-xl font-semibold text-foreground mb-3">Key Insight</h2>
-          <p className="text-foreground leading-relaxed">
-            Queensland hosts the highest number of threatened species overall, reflecting its vast
-            biodiversity hotspots and unique tropical ecosystems. The "Vulnerable" category dominates
-            across all states, indicating early-stage conservation concerns that, with intervention,
-            may prevent species from becoming critically endangered.
-          </p>
+          <h2 className="text-xl font-semibold text-foreground mb-3">
+            {selectedState ? `Key Insight: ${selectedState}` : 'Key Insights by State'}
+          </h2>
+          <div className="text-foreground leading-relaxed space-y-3">
+            {!selectedState ? (
+              <>
+                <p><strong>Queensland (QLD):</strong> Hosts the highest number of threatened species, reflecting vast biodiversity hotspots and unique tropical ecosystems under pressure from habitat loss.</p>
+                <p><strong>New South Wales (NSW):</strong> High species diversity with significant urban development impact, particularly affecting coastal and woodland habitats.</p>
+                <p><strong>Western Australia (WA):</strong> Large number of endemic species face threats from mining activities and introduced predators in remote regions.</p>
+                <p><strong>Victoria (VIC):</strong> Intensive agriculture and urbanisation have fragmented habitats, threatening grassland and wetland species.</p>
+                <p><strong>Tasmania (TAS):</strong> Island ecosystems host unique species vulnerable to climate change and invasive species introduction.</p>
+                <p><strong>South Australia (SA):</strong> Arid and semi-arid species face increasing pressure from desertification and water scarcity.</p>
+                <p><strong>Northern Territory (NT):</strong> Tropical and arid zone species threatened by feral animals and altered fire regimes.</p>
+                <p><strong>Australian Capital Territory (ACT):</strong> Small territory with localised conservation challenges in urban-rural interface zones.</p>
+              </>
+            ) : selectedState === 'QLD' ? (
+              <p>Queensland hosts the highest number of threatened species across Australia, reflecting its extraordinary biodiversity from tropical rainforests to the Great Barrier Reef. The state's unique ecosystems face mounting pressure from habitat clearing, climate change, and coastal development, making it a critical conservation priority.</p>
+            ) : selectedState === 'NSW' ? (
+              <p>New South Wales shows high species diversity with particular vulnerability in coastal regions and western woodlands. Urban expansion along the coast and agricultural intensification inland have created significant habitat fragmentation, threatening both terrestrial and marine species.</p>
+            ) : selectedState === 'WA' ? (
+              <p>Western Australia's vast landmass contains numerous endemic species found nowhere else on Earth. Mining operations, introduced predators like foxes and cats, and changing rainfall patterns pose severe threats to these unique desert and southwest forest ecosystems.</p>
+            ) : selectedState === 'VIC' ? (
+              <p>Victoria's intensive agricultural landscape and dense urban centers have transformed much of the state's original habitat. Grassland species and wetland fauna are particularly vulnerable, with the "Vulnerable" category indicating species at early-stage risk requiring immediate conservation intervention.</p>
+            ) : selectedState === 'TAS' ? (
+              <p>Tasmania's island isolation has produced unique species assemblages highly sensitive to environmental change. Climate warming, invasive species, and disease (like the devastating Tasmanian Devil facial tumor) create compounding threats to this irreplaceable biodiversity.</p>
+            ) : selectedState === 'SA' ? (
+              <p>South Australia's predominantly arid and semi-arid environments host species specially adapted to harsh conditions. Increasing temperatures, prolonged droughts, and habitat degradation from pastoral activities threaten these resilient but vulnerable populations.</p>
+            ) : selectedState === 'NT' ? (
+              <p>The Northern Territory's remote tropical and desert ecosystems face threats from altered fire management, feral herbivores, and predatory mammals. Indigenous land management practices offer hope for conservation of unique monsoonal and spinifex grassland species.</p>
+            ) : selectedState === 'ACT' ? (
+              <p>Despite its small size, the Australian Capital Territory contains important habitat remnants within an urbanised landscape. Grassland birds and woodland mammals face pressure from development, requiring careful management of the urban-nature interface.</p>
+            ) : null}
+          </div>
         </div>
       </section>
 
