@@ -38,14 +38,14 @@ const Index = () => {
     width: 'container',
     height: 500,
     data: {
-      url: './australia.json',
+      url: 'australia.json',
       format: { type: 'json' }
     },
     transform: [
       {
         lookup: 'properties.state',
         from: {
-          data: { url: './threatened_species.csv' },
+          data: { url: 'threatened_species.csv' },
           key: 'state',
           fields: ['count']
         }
