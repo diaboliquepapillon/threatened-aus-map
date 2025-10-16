@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { InsightCard } from '@/components/InsightCard';
 import { VegaLiteChart } from '@/components/VegaLiteChart';
+import { StackedBarChart } from '@/components/StackedBarChart';
+import { GroupedBarChart } from '@/components/GroupedBarChart';
+import { TreemapChart } from '@/components/TreemapChart';
+import { SectionNarrative } from '@/components/SectionNarrative';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { MapPin, TrendingDown, AlertTriangle, ShieldAlert, Waves } from 'lucide-react';
+import { MapPin, TrendingDown, AlertTriangle, ShieldAlert, Waves, Map, BarChart3, Grid3x3, Layers } from 'lucide-react';
 
 const Index = () => {
   const [selectedGroup, setSelectedGroup] = useState<string>('All');
@@ -215,22 +219,74 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Visualisations Grid */}
+      {/* Main Map Section */}
       <section className="container mx-auto px-6 lg:px-8 py-6 max-w-7xl">
+        <SectionNarrative
+          icon={Map}
+          title="Where Do Threatened Species Live?"
+          description="This choropleth map reveals the geographic distribution of threatened animal species across Australian states and territories. Darker shades indicate higher concentrations of at-risk wildlife."
+          highlight="Queensland hosts the highest number of threatened species, followed by New South Wales and Western Australia"
+        />
+        
+        <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+          <VegaLiteChart spec={mapSpec} />
+          <p className="text-xs text-muted-foreground italic text-center mt-4">
+            Hover over states to see species counts • Click to filter other visualizations
+          </p>
+        </div>
+      </section>
+
+      {/* Comparative Analysis Section */}
+      <section className="container mx-auto px-6 lg:px-8 py-6 max-w-7xl">
+        <SectionNarrative
+          icon={BarChart3}
+          title="How Do Threat Levels Differ Across Regions?"
+          description="Understanding the composition of threat categories helps identify which states face the most severe conservation challenges. The stacked bar chart shows the proportional breakdown of Critically Endangered, Endangered, and Vulnerable species."
+          highlight="Victoria shows a higher proportion of 'Vulnerable' species, indicating early-stage threats requiring immediate intervention"
+        />
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Map Visualization */}
+          {/* Stacked Bar Chart */}
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-            <VegaLiteChart spec={mapSpec} />
+            <StackedBarChart selectedGroup={selectedGroup} selectedState={selectedState} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
-              Click states on the map to filter threat category data
+              Normalized view showing threat composition by state
             </p>
           </div>
 
-          {/* Bar Chart Visualization */}
+          {/* Original Bar Chart */}
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
             <VegaLiteChart spec={barSpec} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
               Conservation status distribution {selectedState ? `in ${stateNameMap[selectedState]}` : 'across Australia'}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Animal Groups Analysis Section */}
+      <section className="container mx-auto px-6 lg:px-8 py-6 max-w-7xl">
+        <SectionNarrative
+          icon={Layers}
+          title="Which Animal Groups Are Most at Risk?"
+          description="Different animal groups face varying levels of threat across Australia. Mammals and birds dominate the threatened species lists, but reptiles and amphibians also show significant vulnerability in specific regions."
+          highlight="Mammals account for the largest proportion of threatened species, followed by birds and reptiles"
+        />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Grouped Bar Chart */}
+          <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+            <GroupedBarChart selectedGroup={selectedGroup} selectedState={selectedState} />
+            <p className="text-xs text-muted-foreground italic text-center mt-4">
+              Grouped comparison of animal groups by threat status
+            </p>
+          </div>
+
+          {/* Treemap/Heatmap */}
+          <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
+            <TreemapChart selectedGroup={selectedGroup} selectedState={selectedState} />
+            <p className="text-xs text-muted-foreground italic text-center mt-4">
+              Heatmap showing species distribution across group and status combinations
             </p>
           </div>
         </div>
