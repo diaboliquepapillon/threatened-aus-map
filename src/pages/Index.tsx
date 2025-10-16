@@ -25,11 +25,11 @@ const Index = () => {
   // Try multiple possible feature names for Australian TopoJSON
   const possibleFeatures = ['states', 'aus_states', 'AUS_2016_AUST', 'STE_2016_AUST', 'australia'];
   
-  // Simple Map Specification
+  // Choropleth Map Specification (TopoJSON + CSV join)
   const mapSpec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
     width: 600,
-    height: 400,
+    height: 420,
     title: {
       text: 'Australia - Threatened Species Map',
       fontSize: 18,
@@ -38,51 +38,46 @@ const Index = () => {
       color: '#4b6043',
     },
     data: {
-      values: [
-        // Fallback: Simple data visualization without map
-        {state: 'NSW', total: 241, lat: -33.8688, lon: 151.2093},
-        {state: 'VIC', total: 156, lat: -37.8136, lon: 144.9631},
-        {state: 'QLD', total: 343, lat: -27.4698, lon: 153.0251},
-        {state: 'WA', total: 243, lat: -31.9505, lon: 115.8605},
-        {state: 'SA', total: 112, lat: -34.9285, lon: 138.6007},
-        {state: 'TAS', total: 89, lat: -42.8821, lon: 147.3272},
-        {state: 'NT', total: 168, lat: -12.4634, lon: 130.8456},
-        {state: 'ACT', total: 34, lat: -35.2809, lon: 149.1300}
-      ]
+      url: '/australia.json',
+      format: { type: 'topojson', feature: 'STE_2016_AUST' }
     },
     projection: {
-      type: 'equirectangular',
-      center: [133, -28],
-      scale: 800
+      type: 'mercator',
+      center: [134, -25],
+      scale: 850
     },
-    mark: {
-      type: 'circle',
-      tooltip: true
-    },
+    transform: [
+      {
+        lookup: 'properties.STE_NAME16',
+        from: {
+          data: { url: '/threatened_species.csv' },
+          key: 'state',
+          transform: [
+            ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
+            { aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }], groupby: ['state'] }
+          ],
+          fields: ['total_count']
+        }
+      }
+    ],
+    mark: { type: 'geoshape', stroke: '#d1d5db', strokeWidth: 0.5 },
     encoding: {
-      longitude: {field: 'lon', type: 'quantitative'},
-      latitude: {field: 'lat', type: 'quantitative'},
-      size: {
-        field: 'total',
-        type: 'quantitative',
-        scale: {range: [100, 1000]},
-        legend: {title: 'Threatened Species Count'}
-      },
       color: {
-        field: 'total',
+        field: 'total_count',
         type: 'quantitative',
-        scale: {scheme: 'oranges'},
-        legend: {title: 'Species Count'}
+        title: 'Threatened species',
+        scale: { scheme: 'oranges' }
       },
       tooltip: [
-        {field: 'state', type: 'nominal', title: 'State'},
-        {field: 'total', type: 'quantitative', title: 'Threatened Species'}
+        { field: 'properties.STE_NAME16', type: 'nominal', title: 'State' },
+        { field: 'total_count', type: 'quantitative', title: 'Total species' }
       ]
     },
     config: {
-      background: 'transparent',
-    },
+      background: 'transparent'
+    }
   };
+
 
   // Bar Chart Specification
   const barSpec = {
