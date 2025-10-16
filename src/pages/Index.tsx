@@ -50,6 +50,12 @@ const Index = () => {
       center: [134, -25],
       scale: 850
     },
+    params: [
+      {
+        name: 'stateSelection',
+        select: { type: 'point', fields: ['properties.STE_NAME16'] }
+      }
+    ],
     transform: [
       {
         lookup: 'properties.STE_NAME16',
@@ -64,13 +70,26 @@ const Index = () => {
         }
       }
     ],
-    mark: { type: 'geoshape', stroke: '#d1d5db', strokeWidth: 0.5 },
+    mark: { 
+      type: 'geoshape', 
+      stroke: '#d1d5db', 
+      strokeWidth: 0.5,
+      cursor: 'pointer'
+    },
     encoding: {
       color: {
         field: 'total_count',
         type: 'quantitative',
         title: 'Threatened species',
         scale: { scheme: 'oranges' }
+      },
+      strokeWidth: {
+        condition: { param: 'stateSelection', empty: false, value: 2 },
+        value: 0.5
+      },
+      opacity: {
+        condition: { param: 'stateSelection', value: 1 },
+        value: 0.7
       },
       tooltip: [
         { field: 'properties.STE_NAME16', type: 'nominal', title: 'State' },
@@ -79,6 +98,18 @@ const Index = () => {
     },
     config: {
       background: 'transparent'
+    }
+  };
+
+  // Handle map click to update selected state
+  const handleMapClick = (stateName: string | null) => {
+    if (stateName) {
+      // Convert full state name to abbreviation
+      const stateAbbrev = Object.keys(stateNameMap).find(
+        key => stateNameMap[key] === stateName
+      );
+      // Toggle: if already selected, deselect
+      setSelectedState(prev => prev === stateAbbrev ? null : stateAbbrev || null);
     }
   };
 
@@ -229,7 +260,7 @@ const Index = () => {
         />
         
         <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-          <VegaLiteChart spec={mapSpec} />
+          <VegaLiteChart spec={mapSpec} onStateClick={handleMapClick} />
           <p className="text-xs text-muted-foreground italic text-center mt-4">
             Hover over states to see species counts • Click to filter other visualizations
           </p>
