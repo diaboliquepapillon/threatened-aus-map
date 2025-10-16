@@ -7,7 +7,7 @@ interface GroupedBarChartProps {
 
 export const GroupedBarChart = ({ selectedGroup, selectedStateName }: GroupedBarChartProps) => {
   const spec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 320,
     title: {

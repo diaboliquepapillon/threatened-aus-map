@@ -12,6 +12,7 @@ export const VegaLiteChart = ({ spec, className = "", onStateClick }: VegaLiteCh
 
   useEffect(() => {
     if (containerRef.current) {
+      console.log('Embedding chart with spec:', spec);
       vegaEmbed(containerRef.current, spec, {
         actions: {
           export: true,
@@ -24,11 +25,13 @@ export const VegaLiteChart = ({ spec, className = "", onStateClick }: VegaLiteCh
         if (onStateClick && result.view) {
           // Listen for clicks on the visualization
           result.view.addEventListener('click', (event: any, item: any) => {
-            if (item && item.datum && item.datum.properties && item.datum.properties.STE_NAME16) {
-              onStateClick(item.datum.properties.STE_NAME16);
+            if (item && item.datum && item.datum.properties && item.datum.properties.state) {
+              onStateClick(item.datum.properties.state);
             }
           });
         }
+      }).catch(error => {
+        console.error('Error embedding visualization:', error);
       });
     }
   }, [spec, onStateClick]);

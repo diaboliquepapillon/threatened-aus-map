@@ -34,70 +34,73 @@ const Index = () => {
   
   // Choropleth Map Specification (TopoJSON + CSV join)
   const mapSpec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
-    height: 400,
-    title: {
-      text: 'Australia - Threatened Species Map',
-      fontSize: 18,
-      font: 'Inter',
-      fontWeight: 600,
-      color: '#4b6043',
-    },
+    height: 500,
     data: {
       url: '/australia.json',
-      format: { type: 'topojson', feature: 'STE_2016_AUST' }
+      format: { type: 'json' }
     },
-    projection: {
-      type: 'mercator',
-      center: [134, -25],
-      scale: 850
-    },
-    params: [
-      {
-        name: 'stateSelection',
-        select: { type: 'point', fields: ['properties.STE_NAME16'] }
-      }
-    ],
     transform: [
       {
-        lookup: 'properties.STE_NAME16',
+        lookup: 'properties.state',
         from: {
           data: { url: '/threatened_species.csv' },
           key: 'state',
-          transform: [
-            ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-            { aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }], groupby: ['state'] }
-          ],
-          fields: ['total_count']
+          fields: ['count']
         }
+      },
+      {
+        aggregate: [{
+          op: 'sum',
+          field: 'count',
+          as: 'total_count'
+        }],
+        groupby: ['properties.state']
       }
     ],
-    mark: { 
-      type: 'geoshape', 
-      stroke: '#d1d5db', 
-      strokeWidth: 0.5,
+    projection: {
+      type: 'mercator',
+      center: [133, -27],
+      scale: 800
+    },
+    mark: {
+      type: 'geoshape',
+      stroke: '#666',
+      strokeWidth: 1,
       cursor: 'pointer'
     },
     encoding: {
       color: {
         field: 'total_count',
         type: 'quantitative',
-        title: 'Threatened species',
-        scale: { scheme: 'oranges' }
-      },
-      strokeWidth: {
-        condition: { param: 'stateSelection', empty: false, value: 2 },
-        value: 0.5
-      },
-      opacity: {
-        condition: { param: 'stateSelection', value: 1 },
-        value: 0.7
+        title: 'Threatened Species',
+        scale: {
+          scheme: 'orangered',
+          domainMin: 0
+        },
+        legend: {
+          format: ',.0f',
+          titleFontSize: 12,
+          labelFontSize: 11
+        }
       },
       tooltip: [
-        { field: 'properties.STE_NAME16', type: 'nominal', title: 'State' },
-        { field: 'total_count', type: 'quantitative', title: 'Total species' }
-      ]
+        { field: 'properties.state', type: 'nominal', title: 'State' },
+        { field: 'total_count', type: 'quantitative', title: 'Species Count', format: ',.0f' }
+      ],
+      opacity: {
+        value: 0.9
+      },
+      strokeWidth: {
+        condition: [
+          {
+            test: "datum.total_count > 0",
+            value: 1
+          }
+        ],
+        value: 0.5
+      }
     },
     config: {
       background: 'transparent'
@@ -119,7 +122,7 @@ const Index = () => {
 
   // Bar Chart Specification
   const barSpec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 320,
     title: {
