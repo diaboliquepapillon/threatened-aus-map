@@ -22,7 +22,7 @@ const Index = () => {
     'ACT': 'Australian Capital Territory',
   };
 
-  // Choropleth Map Specification
+  // Choropleth Map Specification  
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 600,
@@ -38,12 +38,12 @@ const Index = () => {
       url: '/australia.json',
       format: {
         type: 'topojson',
-        feature: 'states',
+        feature: 'STE_2016_AUST',
       },
     },
     transform: [
       {
-        lookup: 'properties.STATE_NAME',
+        lookup: 'properties.STE_NAME16',
         from: {
           data: { url: '/threatened_species.csv' },
           key: 'state',
@@ -53,18 +53,16 @@ const Index = () => {
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
       {
         aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['properties.STATE_NAME'],
+        groupby: ['properties.STE_NAME16'],
       },
     ],
     projection: {
-      type: 'mercator',
-      center: [133, -28],
-      scale: 800,
+      type: 'equirectangular',
     },
     mark: {
       type: 'geoshape',
       stroke: '#4b6043',
-      strokeWidth: 1.5,
+      strokeWidth: 1,
     },
     encoding: {
       color: {
@@ -83,7 +81,7 @@ const Index = () => {
         },
       },
       tooltip: [
-        { field: 'properties.STATE_NAME', type: 'nominal', title: 'State' },
+        { field: 'properties.STE_NAME16', type: 'nominal', title: 'State' },
         { field: 'total_count', type: 'quantitative', title: 'Count', format: ',.0f' },
       ],
     },
