@@ -8,40 +8,39 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Academic beige palette for data visualization */
-    --background: 35 35% 96%;  /* #f7f4ef beige */
-    --foreground: 25 20% 20%;  /* Dark brown text */
-
-    --card: 0 0% 100%;  /* White cards */
-    --card-foreground: 25 20% 20%;
-
+    /* Core colors - earthy academic palette */
+    --background: 38 25% 96%;        /* #f7f4ef - beige */
+    --foreground: 30 30% 15%;        /* #3d2817 - dark brown */
+    --card: 0 0% 100%;               /* white */
+    --card-foreground: 30 30% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 25 20% 20%;
-
-    /* Earth tone primary - ochre/rust */
-    --primary: 25 65% 45%;  /* Ochre */
-    --primary-foreground: 0 0% 100%;
-
-    /* Eucalyptus green secondary */
-    --secondary: 155 30% 55%;
-    --secondary-foreground: 0 0% 100%;
-
-    /* Muted beige tones */
-    --muted: 35 25% 88%;
-    --muted-foreground: 25 15% 40%;
-
-    /* Coral accent */
-    --accent: 15 75% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    /* Destructive - red for critically endangered */
+    --popover-foreground: 30 30% 15%;
+    
+    /* Primary - forest green */
+    --primary: 100 15% 32%;          /* #4b6043 */
+    --primary-foreground: 0 0% 98%;
+    
+    /* Secondary - coral red */
+    --secondary: 12 55% 55%;         /* #d36b4b */
+    --secondary-foreground: 0 0% 98%;
+    
+    /* Accent - soft brown */
+    --accent: 35 20% 50%;            /* #8b7a5b */
+    --accent-foreground: 0 0% 98%;
+    
+    /* Muted */
+    --muted: 38 20% 90%;
+    --muted-foreground: 30 10% 40%;  /* #555 equivalent */
+    
+    /* Border */
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 100 15% 32%;
+    
+    /* Destructive */
     --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 35 20% 85%;
-    --input: 35 20% 85%;
-    --ring: 25 65% 45%;
-
+    --destructive-foreground: 0 0% 98%;
+    
     --radius: 0.5rem;
 
     /* Data visualization specific colors */
