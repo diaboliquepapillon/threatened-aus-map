@@ -1,0 +1,29 @@
+{
+  "type": "Topology",
+  "objects": {
+    "states": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {"type": "Polygon", "properties": {"STATE_NAME": "Western Australia"}, "arcs": [[0]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "Northern Territory"}, "arcs": [[1]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "South Australia"}, "arcs": [[2]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "Queensland"}, "arcs": [[3]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "New South Wales"}, "arcs": [[4]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "Victoria"}, "arcs": [[5]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "Tasmania"}, "arcs": [[6]]},
+        {"type": "Polygon", "properties": {"STATE_NAME": "Australian Capital Territory"}, "arcs": [[7]]}
+      ]
+    }
+  },
+  "arcs": [
+    [[[113.338953078, -26.142786446], [128.999999999, -26.142786446], [128.999999999, -35.5], [113.338953078, -35.5], [113.338953078, -26.142786446]]],
+    [[[129, -26.142786446], [138, -26.142786446], [138, -14], [129, -14], [129, -26.142786446]]],
+    [[[129, -26.142786446], [141, -26.142786446], [141, -35], [129, -35], [129, -26.142786446]]],
+    [[[138, -28.999999999], [154, -28.999999999], [154, -10.999999999], [138, -10.999999999], [138, -28.999999999]]],
+    [[[141, -28.999999999], [153, -28.999999999], [153, -37.505], [141, -37.505], [141, -28.999999999]]],
+    [[[141, -37.505], [150, -37.505], [150, -39.159], [141, -39.159], [141, -37.505]]],
+    [[[144, -40.7], [149, -40.7], [149, -43.6], [144, -43.6], [144, -40.7]]],
+    [[[148.8, -35.2], [149.3, -35.2], [149.3, -35.7], [148.8, -35.7], [148.8, -35.2]]]
+  ],
+  "transform": {"scale": [0.00046, 0.00038], "translate": [112.9, -43.7]}
+}
