@@ -2,10 +2,10 @@ import { VegaLiteChart } from './VegaLiteChart';
 
 interface StackedBarChartProps {
   selectedGroup: string;
-  selectedState: string | null;
+  selectedStateName: string | null;
 }
 
-export const StackedBarChart = ({ selectedGroup, selectedState }: StackedBarChartProps) => {
+export const StackedBarChart = ({ selectedGroup, selectedStateName }: StackedBarChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 550,
@@ -22,7 +22,7 @@ export const StackedBarChart = ({ selectedGroup, selectedState }: StackedBarChar
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      ...(selectedState ? [{ filter: `datum.state == '${selectedState}'` }] : []),
+      ...(selectedStateName ? [{ filter: `datum.state == '${selectedStateName}'` }] : []),
       {
         aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
         groupby: ['state', 'status'],

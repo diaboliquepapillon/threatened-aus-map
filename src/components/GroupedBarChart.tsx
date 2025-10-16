@@ -2,17 +2,17 @@ import { VegaLiteChart } from './VegaLiteChart';
 
 interface GroupedBarChartProps {
   selectedGroup: string;
-  selectedState: string | null;
+  selectedStateName: string | null;
 }
 
-export const GroupedBarChart = ({ selectedGroup, selectedState }: GroupedBarChartProps) => {
+export const GroupedBarChart = ({ selectedGroup, selectedStateName }: GroupedBarChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 550,
     height: 350,
     title: {
-      text: selectedState 
-        ? `Animal Groups in ${selectedState}` 
+      text: selectedStateName 
+        ? `Animal Groups in ${selectedStateName}` 
         : 'Animal Groups Across Australia',
       fontSize: 18,
       font: 'Inter',
@@ -24,7 +24,7 @@ export const GroupedBarChart = ({ selectedGroup, selectedState }: GroupedBarChar
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      ...(selectedState ? [{ filter: `datum.state == '${selectedState}'` }] : []),
+      ...(selectedStateName ? [{ filter: `datum.state == '${selectedStateName}'` }] : []),
       {
         aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
         groupby: ['group', 'status'],

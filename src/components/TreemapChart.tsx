@@ -2,10 +2,10 @@ import { VegaLiteChart } from './VegaLiteChart';
 
 interface TreemapChartProps {
   selectedGroup: string;
-  selectedState: string | null;
+  selectedStateName: string | null;
 }
 
-export const TreemapChart = ({ selectedGroup, selectedState }: TreemapChartProps) => {
+export const TreemapChart = ({ selectedGroup, selectedStateName }: TreemapChartProps) => {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 550,
@@ -22,7 +22,7 @@ export const TreemapChart = ({ selectedGroup, selectedState }: TreemapChartProps
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      ...(selectedState ? [{ filter: `datum.state == '${selectedState}'` }] : []),
+      ...(selectedStateName ? [{ filter: `datum.state == '${selectedStateName}'` }] : []),
       {
         aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
         groupby: ['group', 'status'],

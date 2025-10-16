@@ -26,6 +26,9 @@ const Index = () => {
     'ACT': 'Australian Capital Territory',
   };
 
+  // Derived state full name for filtering
+  const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
+
   // Try multiple possible feature names for Australian TopoJSON
   const possibleFeatures = ['states', 'aus_states', 'AUS_2016_AUST', 'STE_2016_AUST', 'australia'];
   
@@ -279,7 +282,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Stacked Bar Chart */}
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-            <StackedBarChart selectedGroup={selectedGroup} selectedState={selectedState} />
+            <StackedBarChart selectedGroup={selectedGroup} selectedStateName={selectedStateFull} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
               Normalized view showing threat composition by state
             </p>
@@ -307,7 +310,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Grouped Bar Chart */}
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-            <GroupedBarChart selectedGroup={selectedGroup} selectedState={selectedState} />
+            <GroupedBarChart selectedGroup={selectedGroup} selectedStateName={selectedStateFull} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
               Grouped comparison of animal groups by threat status
             </p>
@@ -315,7 +318,7 @@ const Index = () => {
 
           {/* Treemap/Heatmap */}
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
-            <TreemapChart selectedGroup={selectedGroup} selectedState={selectedState} />
+            <TreemapChart selectedGroup={selectedGroup} selectedStateName={selectedStateFull} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
               Heatmap showing species distribution across group and status combinations
             </p>
