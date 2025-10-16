@@ -18,22 +18,36 @@ const Index = () => {
       fontWeight: 600,
       color: '#3d2817',
     },
-    data: {
-      url: '/threatened_species.csv',
-    },
-    transform: [
-      ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      {
-        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['state'],
-      },
-    ],
     layer: [
       {
+        data: {
+          url: '/australia.json',
+          format: {
+            type: 'topojson',
+            feature: 'austates',
+          },
+        },
+        transform: [
+          {
+            lookup: 'properties.STATE_NAME',
+            from: {
+              data: {
+                url: '/threatened_species.csv',
+              },
+              key: 'state',
+              fields: ['count', 'group'],
+            },
+          },
+          ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
+          {
+            aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
+            groupby: ['properties.STATE_NAME'],
+          },
+        ],
         mark: {
           type: 'geoshape',
           stroke: '#8b6f47',
-          strokeWidth: 1,
+          strokeWidth: 1.5,
           cursor: 'pointer',
         },
         encoding: {
@@ -51,7 +65,7 @@ const Index = () => {
             },
           },
           tooltip: [
-            { field: 'state', type: 'nominal', title: 'State' },
+            { field: 'properties.STATE_NAME', type: 'nominal', title: 'State' },
             { field: 'total_count', type: 'quantitative', title: 'Threatened Species' },
           ],
         },
@@ -203,9 +217,10 @@ const Index = () => {
       {/* Map Visualization */}
       <section className="container mx-auto px-8 py-6 max-w-6xl">
         <div className="bg-card rounded-lg p-8 shadow-sm">
-          <div className="text-center mb-4">
+          <VegaLiteChart spec={mapSpec} />
+          <div className="text-center mt-4">
             <p className="text-sm text-muted-foreground italic">
-              Note: Map visualization requires TopoJSON data. Click states in the bar chart below to filter.
+              Click on states in the map or use the buttons below to explore state-specific data.
             </p>
           </div>
         </div>
