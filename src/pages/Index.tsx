@@ -50,9 +50,8 @@ const Index = () => {
     width: 800,
     height: 500,
     projection: { 
-      type: 'equalEarth',
-      rotate: [0, 0, 0],
-      scale: 1000,
+      type: 'mercator',
+      scale: 1200,
       translate: [400, 250]
     },
     data: {
