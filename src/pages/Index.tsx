@@ -63,8 +63,8 @@ const Index = () => {
     mark: {
       type: 'geoshape',
       stroke: '#000000',
-      strokeWidth: 1.5,
-      fill: 'transparent',
+      strokeWidth: 2,
+      fill: '#ffffff',
       cursor: 'pointer'
     },
     encoding: {
