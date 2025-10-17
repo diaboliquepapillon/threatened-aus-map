@@ -32,7 +32,7 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Map with simple data lookup using pre-aggregated data
+  // Basic working map - no data lookup
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     title: 'Threatened Species in Australia',
@@ -43,36 +43,15 @@ const Index = () => {
       url: `${baseUrl}australia_topo.json`,
       format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
     },
-    transform: [
-      {
-        lookup: 'properties.STE_NAME21',
-        from: {
-          data: { url: `${baseUrl}species_by_state.csv` },
-          key: 'state',
-          fields: ['species_count']
-        }
-      }
-    ],
     mark: { 
       type: 'geoshape', 
       stroke: 'white', 
-      strokeWidth: 0.5
+      strokeWidth: 0.5,
+      fill: '#e0e0e0'
     },
     encoding: {
-      color: {
-        field: 'species_count',
-        type: 'quantitative',
-        scale: { scheme: 'reds' },
-        legend: { 
-          title: 'Threatened Species', 
-          orient: 'bottom', 
-          direction: 'horizontal', 
-          gradientLength: 300 
-        }
-      },
       tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' },
-        { field: 'species_count', type: 'quantitative', title: 'Threatened Species', format: ',.0f' }
+        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
       ]
     }
   };
