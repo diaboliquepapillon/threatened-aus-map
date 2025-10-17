@@ -32,31 +32,27 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Test with simple geoshape rectangle
+  // Test with point chart to verify basic functionality
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    title: 'Test Geoshape',
+    title: 'Test Points - Should show dots',
     width: 800,
     height: 500,
     data: {
-      values: [{
-        geometry: {
-          type: 'Polygon',
-          coordinates: [[[110, -45], [155, -45], [155, -10], [110, -10], [110, -45]]]
-        },
-        name: 'Australia'
-      }]
+      values: [
+        { x: 100, y: 200, name: 'Sydney' },
+        { x: 200, y: 150, name: 'Melbourne' },
+        { x: 300, y: 100, name: 'Brisbane' }
+      ]
     },
-    mark: { 
-      type: 'geoshape', 
-      stroke: 'white', 
-      strokeWidth: 2, 
-      fill: '#e0e0e0'
-    },
+    mark: 'circle',
     encoding: {
-      shape: { field: 'geometry', type: 'geojson' },
+      x: { field: 'x', type: 'quantitative' },
+      y: { field: 'y', type: 'quantitative' },
+      size: { value: 100 },
+      color: { value: 'red' },
       tooltip: [
-        { field: 'name', type: 'nominal', title: 'Name' }
+        { field: 'name', type: 'nominal', title: 'City' }
       ]
     }
   };
