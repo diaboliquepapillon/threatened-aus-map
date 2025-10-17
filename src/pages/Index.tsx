@@ -41,14 +41,41 @@ const Index = () => {
       "url": "australia.json",
       "format": {"type": "json", "property": "features"}
     },
+    "transform": [
+      {
+        "lookup": "properties.STE_NAME21",
+        "from": {
+          "data": {"url": "threatened_species.csv"},
+          "key": "state",
+          "fields": ["count", "group"]
+        }
+      },
+      ...(selectedGroup !== 'All' ? [{"filter": `datum.group == '${selectedGroup}'`}] : []),
+      {
+        "joinaggregate": [{"op": "sum", "field": "count", "as": "total_count"}],
+        "groupby": ["properties.STE_NAME21"]
+      }
+    ],
     "projection": {"type": "equalEarth"},
-    "mark": "geoshape",
+    "mark": {"type": "geoshape", "stroke": "#666", "strokeWidth": 0.5},
     "encoding": {
-      "color": {"value": "#fdd8b8"},
-      "stroke": {"value": "#666"},
-      "strokeWidth": {"value": 0.5},
+      "color": {
+        "field": "total_count",
+        "type": "quantitative",
+        "scale": {
+          "scheme": "oranges",
+          "domain": [0, 700]
+        },
+        "legend": {
+          "title": "Threatened Species Count",
+          "orient": "bottom",
+          "direction": "horizontal",
+          "gradientLength": 300
+        }
+      },
       "tooltip": [
-        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"}
+        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State/Territory"},
+        {"field": "total_count", "type": "quantitative", "title": "Species Count", "format": ",.0f"}
       ]
     }
   };
