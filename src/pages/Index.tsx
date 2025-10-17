@@ -50,8 +50,7 @@ const Index = () => {
     width: 800,
     height: 500,
     projection: { 
-      type: 'albers',
-      rotate: [0, 0, 0],
+      type: 'naturalEarth',
       scale: 1000,
       translate: [400, 250]
     },
