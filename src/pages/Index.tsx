@@ -37,9 +37,10 @@ const Index = () => {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
     "height": 500,
+    "projection": {"type": "equalEarth"},
     "data": {
       "url": "australia.json",
-      "format": {"type": "json", "property": "features"}
+      "format": {"type": "json"}
     },
     "transform": [
       {
@@ -56,15 +57,13 @@ const Index = () => {
         "groupby": ["properties.STE_NAME21"]
       }
     ],
-    "projection": {"type": "equalEarth"},
-    "mark": {"type": "geoshape", "stroke": "#666", "strokeWidth": 0.5},
+    "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
     "encoding": {
       "color": {
         "field": "total_count",
         "type": "quantitative",
         "scale": {
-          "scheme": "oranges",
-          "domain": [0, 700]
+          "scheme": "reds"
         },
         "legend": {
           "title": "Threatened Species Count",
@@ -74,8 +73,8 @@ const Index = () => {
         }
       },
       "tooltip": [
-        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State/Territory"},
-        {"field": "total_count", "type": "quantitative", "title": "Species Count", "format": ",.0f"}
+        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"},
+        {"field": "total_count", "type": "quantitative", "title": "Threatened Species"}
       ]
     }
   };
