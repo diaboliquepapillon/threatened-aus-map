@@ -55,9 +55,10 @@ const Index = () => {
       }
     ],
     projection: {
-      type: 'mercator',
-      center: [133, -27],
-      scale: 800
+      type: 'equirectangular',
+      center: [133, -28],
+      scale: 650,
+      translate: [0, 0]
     },
     mark: {
       type: 'geoshape',
