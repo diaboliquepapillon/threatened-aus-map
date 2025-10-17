@@ -75,7 +75,7 @@ const Index = () => {
         scale: {
           type: 'threshold',
           domain: [20, 50, 100, 150, 200, 250],
-          range: ['#e8f5e9', '#a5d6a7', '#66bb6a', '#ffd54f', '#ffb74d', '#ff8a65', '#e57373']
+          range: ['#e8f5e9', '#a5d6a7', '#66bb6a', '#fdd835', '#ffb300', '#ff8f00', '#f57c00']
         },
         legend: {
           orient: 'bottom-right',
