@@ -29,54 +29,65 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Try multiple possible feature names for Australian TopoJSON
-  const possibleFeatures = ['states', 'aus_states', 'AUS_2016_AUST', 'STE_2016_AUST', 'australia'];
-  
-  // Choropleth Map Specification (CSV aggregate -> GeoJSON lookup)
+  // Choropleth Map Specification - Rebuilt from scratch
   const mapSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
     "height": 500,
-    "projection": {"type": "equalEarth"},
-    "data": {
-      "url": "australia.json",
-      "format": {"type": "json", "property": "features"}
-    },
-    "transform": [
+    "layer": [
       {
-        "lookup": "properties.STE_NAME21",
-        "from": {
-          "data": {"url": "threatened_species.csv"},
-          "key": "state",
-          "fields": ["count", "group"]
+        "data": {
+          "url": "australia.json",
+          "format": {"type": "json", "property": "features"}
         },
-        "as": ["row_count", "row_group"]
-      },
-      { "flatten": ["row_count", "row_group"] },
-      ...(selectedGroup !== 'All' ? [{"filter": `datum.row_group == '${selectedGroup}'`}] : []),
-      {
-        "aggregate": [{"op": "sum", "field": "row_count", "as": "total_count"}],
-        "groupby": ["properties.STE_NAME21"]
-      }
-    ],
-    "mark": {"type": "geoshape", "stroke": "#666", "strokeWidth": 0.5},
-    "encoding": {
-      "color": {
-        "field": "total_count",
-        "type": "quantitative",
-        "scale": { "scheme": "reds" },
-        "legend": {
-          "title": "Threatened Species Count",
-          "orient": "bottom",
-          "direction": "horizontal",
-          "gradientLength": 300
+        "projection": {"type": "equalEarth"},
+        "transform": [
+          {
+            "lookup": "properties.STE_NAME21",
+            "from": {
+              "data": {"url": "threatened_species.csv"},
+              "key": "state",
+              "fields": ["count", "group"]
+            },
+            "default": ""
+          },
+          {"filter": selectedGroup !== 'All' ? `datum.group == '${selectedGroup}'` : "datum.count != null"},
+          {
+            "aggregate": [{"op": "sum", "field": "count", "as": "species_count"}],
+            "groupby": ["properties.STE_NAME21"]
+          },
+          {
+            "lookup": "properties.STE_NAME21",
+            "from": {
+              "data": {
+                "url": "australia.json",
+                "format": {"type": "json", "property": "features"}
+              },
+              "key": "properties.STE_NAME21",
+              "fields": ["type", "properties", "geometry"]
+            }
+          }
+        ],
+        "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
+        "encoding": {
+          "color": {
+            "field": "species_count",
+            "type": "quantitative",
+            "scale": {"scheme": "reds"},
+            "legend": {
+              "title": "Threatened Species",
+              "orient": "bottom",
+              "direction": "horizontal",
+              "gradientLength": 300
+            }
+          },
+          "tooltip": [
+            {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"},
+            {"field": "species_count", "type": "quantitative", "title": "Threatened Species"}
+          ]
         }
-      },
-      "tooltip": [
-        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State/Territory"},
-        {"field": "total_count", "type": "quantitative", "title": "Threatened Species", "format": ",.0f"}
-      ]
-    }
+      }
+    ]
   };
 
   // Handle map click to update selected state
