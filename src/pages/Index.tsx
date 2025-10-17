@@ -53,29 +53,48 @@ const Index = () => {
         groupby: ['properties.STE_NAME21', 'type', 'geometry']
       }
     ],
-    projection: { type: 'mercator', center: [134, -26], scale: 650, clipExtent: [[0, 0], [1200, 500]] },
-    mark: { type: 'geoshape', stroke: '#666', strokeWidth: 0.8 },
-    encoding: {
-      color: {
-        field: 'total_count',
-        type: 'quantitative',
-        scale: {
-          scheme: 'oranges',
-          domain: [0, 700]
+    projection: { type: 'equalEarth', center: [134, -26], scale: 650 },
+    layer: [
+      {
+        mark: { 
+          type: 'geoshape', 
+          stroke: '#e0e0e0', 
+          strokeWidth: 0.5,
+          strokeOpacity: 0.3
         },
-        legend: {
-          title: 'Species Count',
-          orient: 'bottom-right',
-          direction: 'horizontal',
-          gradientLength: 200
+        encoding: {
+          color: {
+            field: 'total_count',
+            type: 'quantitative',
+            scale: {
+              type: 'quantize',
+              domain: [0, 700],
+              range: ['#fffef0', '#fee5b8', '#fdbe85', '#fd8d3c', '#e6550d', '#bd0026', '#7f0000']
+            },
+            legend: {
+              title: 'Threatened Species Count',
+              orient: 'bottom-right',
+              direction: 'vertical',
+              labelFontSize: 10,
+              titleFontSize: 11,
+              titleFontWeight: 600,
+              symbolType: 'square',
+              symbolSize: 200,
+              labelExpr: 'datum.value === 0 ? "0–100" : datum.value === 100 ? "100–200" : datum.value === 200 ? "200–300" : datum.value === 300 ? "300–400" : datum.value === 400 ? "400–500" : datum.value === 500 ? "500–600" : "600+"',
+              values: [0, 100, 200, 300, 400, 500, 600]
+            }
+          },
+          tooltip: [
+            { field: 'properties.STE_NAME21', type: 'nominal', title: 'Region' },
+            { field: 'total_count', type: 'quantitative', title: 'Species Count', format: ',.0f' }
+          ]
         }
-      },
-      tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State/Territory' },
-        { field: 'total_count', type: 'quantitative', title: 'Total Species', format: ',.0f' }
-      ]
-    },
-    config: { background: 'transparent', view: { stroke: 'transparent' } }
+      }
+    ],
+    config: { 
+      background: '#fafaf5',
+      view: { stroke: null }
+    }
   };
 
   // Handle map click to update selected state
