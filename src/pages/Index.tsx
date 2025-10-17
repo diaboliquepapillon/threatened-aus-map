@@ -32,27 +32,26 @@ const Index = () => {
   // Try multiple possible feature names for Australian TopoJSON
   const possibleFeatures = ['states', 'aus_states', 'AUS_2016_AUST', 'STE_2016_AUST', 'australia'];
   
-  // Choropleth Map Specification (GeoJSON + CSV join)
+  // Choropleth Map Specification (CSV aggregate -> GeoJSON lookup)
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 500,
     data: {
-      url: 'australia.json',
-      format: { type: 'json', property: 'features' }
+      url: 'threatened_species.csv',
     },
     transform: [
       {
-        lookup: 'properties.state',
-        from: {
-          data: { url: 'threatened_species.csv' },
-          key: 'state',
-          fields: ['count']
-        }
+        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
+        groupby: ['state']
       },
       {
-        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['properties.state']
+        lookup: 'state',
+        from: {
+          data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
+          key: 'properties.state'
+        },
+        as: 'feature'
       }
     ],
     projection: {
@@ -67,6 +66,7 @@ const Index = () => {
       cursor: 'pointer'
     },
     encoding: {
+      shape: { field: 'feature', type: 'geojson' },
       color: {
         field: 'total_count',
         type: 'quantitative',
@@ -82,7 +82,7 @@ const Index = () => {
         }
       },
       tooltip: [
-        { field: 'properties.state', type: 'nominal', title: 'State' },
+        { field: 'state', type: 'nominal', title: 'State' },
         { field: 'total_count', type: 'quantitative', title: 'Species Count', format: ',.0f' }
       ],
       opacity: {

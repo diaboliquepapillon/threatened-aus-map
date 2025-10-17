@@ -18,7 +18,7 @@ export const TreemapChart = ({ selectedGroup, selectedStateName }: TreemapChartP
       color: '#4b6043',
     },
     data: {
-      url: '/threatened_species.csv',
+      url: 'threatened_species.csv',
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
