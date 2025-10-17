@@ -49,7 +49,12 @@ const Index = () => {
     title: 'Threatened Species in Australia',
     width: 800,
     height: 500,
-    projection: { type: 'equalEarth' },
+    projection: { 
+      type: 'albers',
+      rotate: [0, 0, 0],
+      scale: 1000,
+      translate: [400, 250]
+    },
     data: {
       url: `${baseUrl}australia_topo.json`,
       format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
