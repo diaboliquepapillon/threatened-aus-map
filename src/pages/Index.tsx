@@ -40,8 +40,7 @@ const Index = () => {
     height: 500,
     projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`,
-      format: { type: 'json', property: 'features' }
+      url: `${baseUrl}australia.json`
     },
     mark: { type: 'geoshape', stroke: 'white', strokeWidth: 0.5, fill: '#e0e0e0' },
     encoding: {
