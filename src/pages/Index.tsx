@@ -32,7 +32,7 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // TopoJSON approach - much better for geoshape
+  // TopoJSON approach - using the uploaded TopoJSON file
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     title: 'Threatened Species in Australia',
@@ -40,8 +40,8 @@ const Index = () => {
     height: 500,
     projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`,
-      format: { type: 'topojson', feature: 'features' }
+      url: `${baseUrl}australia_topo.json`,
+      format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
     },
     mark: { 
       type: 'geoshape', 
