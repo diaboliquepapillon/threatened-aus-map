@@ -57,7 +57,7 @@ const Index = () => {
     projection: {
       type: 'equirectangular',
       center: [133, -28],
-      scale: 650,
+      scale: 450,
       translate: [0, 0]
     },
     mark: {
