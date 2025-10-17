@@ -32,27 +32,31 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Choropleth Map Specification - Fixed with proper data structure
+  // Test with simple geoshape rectangle
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    title: 'Threatened Species in Australia',
+    title: 'Test Geoshape',
     width: 800,
     height: 500,
-    projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`,
-      format: { type: 'json', property: 'features' }
+      values: [{
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[[110, -45], [155, -45], [155, -10], [110, -10], [110, -45]]]
+        },
+        name: 'Australia'
+      }]
     },
     mark: { 
       type: 'geoshape', 
       stroke: 'white', 
-      strokeWidth: 0.5, 
+      strokeWidth: 2, 
       fill: '#e0e0e0'
     },
     encoding: {
       shape: { field: 'geometry', type: 'geojson' },
       tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
+        { field: 'name', type: 'nominal', title: 'Name' }
       ]
     }
   };
