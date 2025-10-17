@@ -42,15 +42,19 @@ const Index = () => {
       {
         lookup: 'properties.STE_NAME21',
         from: {
-          data: { url: 'threatened_species.csv' },
+          data: { 
+            url: 'threatened_species.csv',
+            format: { type: 'csv' }
+          },
           key: 'state',
           fields: ['count', 'group']
-        }
+        },
+        as: ['count', 'group']
       },
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
       {
-        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['properties.STE_NAME21', 'type', 'geometry']
+        joinaggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
+        groupby: ['properties.STE_NAME21']
       }
     ],
     projection: { type: 'equalEarth', center: [134, -26], scale: 650 },
