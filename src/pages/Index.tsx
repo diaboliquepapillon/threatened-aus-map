@@ -32,7 +32,18 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Basic working map - no data lookup
+  // Map with hardcoded species data - more reliable approach
+  const speciesData = {
+    'New South Wales': 747,
+    'Queensland': 602,
+    'Western Australia': 610,
+    'Victoria': 351,
+    'South Australia': 314,
+    'Tasmania': 229,
+    'Northern Territory': 151,
+    'Australian Capital Territory': 69
+  };
+
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     title: 'Threatened Species in Australia',
@@ -43,15 +54,39 @@ const Index = () => {
       url: `${baseUrl}australia_topo.json`,
       format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
     },
+    transform: [
+      {
+        calculate: `datum.properties.STE_NAME21 === 'New South Wales' ? 747 : 
+                   datum.properties.STE_NAME21 === 'Queensland' ? 602 :
+                   datum.properties.STE_NAME21 === 'Western Australia' ? 610 :
+                   datum.properties.STE_NAME21 === 'Victoria' ? 351 :
+                   datum.properties.STE_NAME21 === 'South Australia' ? 314 :
+                   datum.properties.STE_NAME21 === 'Tasmania' ? 229 :
+                   datum.properties.STE_NAME21 === 'Northern Territory' ? 151 :
+                   datum.properties.STE_NAME21 === 'Australian Capital Territory' ? 69 : 0`,
+        as: 'species_count'
+      }
+    ],
     mark: { 
       type: 'geoshape', 
       stroke: 'white', 
-      strokeWidth: 0.5,
-      fill: '#e0e0e0'
+      strokeWidth: 0.5
     },
     encoding: {
+      color: {
+        field: 'species_count',
+        type: 'quantitative',
+        scale: { scheme: 'reds' },
+        legend: { 
+          title: 'Threatened Species', 
+          orient: 'bottom', 
+          direction: 'horizontal', 
+          gradientLength: 300 
+        }
+      },
       tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
+        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' },
+        { field: 'species_count', type: 'quantitative', title: 'Threatened Species', format: ',.0f' }
       ]
     }
   };
