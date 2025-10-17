@@ -32,14 +32,14 @@ const Index = () => {
   // Try multiple possible feature names for Australian TopoJSON
   const possibleFeatures = ['states', 'aus_states', 'AUS_2016_AUST', 'STE_2016_AUST', 'australia'];
   
-  // Choropleth Map Specification (TopoJSON + CSV join)
+  // Choropleth Map Specification (GeoJSON + CSV join)
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 500,
     data: {
       url: 'australia.json',
-      format: { type: 'json' }
+      format: { type: 'json', property: 'features' }
     },
     transform: [
       {
@@ -51,11 +51,7 @@ const Index = () => {
         }
       },
       {
-        aggregate: [{
-          op: 'sum',
-          field: 'count',
-          as: 'total_count'
-        }],
+        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
         groupby: ['properties.state']
       }
     ],
@@ -91,15 +87,6 @@ const Index = () => {
       ],
       opacity: {
         value: 0.9
-      },
-      strokeWidth: {
-        condition: [
-          {
-            test: "datum.total_count > 0",
-            value: 1
-          }
-        ],
-        value: 0.5
       }
     },
     config: {
