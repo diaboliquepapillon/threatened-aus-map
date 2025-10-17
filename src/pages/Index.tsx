@@ -62,39 +62,17 @@ const Index = () => {
     },
     mark: {
       type: 'geoshape',
-      stroke: '#333',
-      strokeWidth: 0.5,
+      stroke: '#000000',
+      strokeWidth: 1.5,
+      fill: 'transparent',
       cursor: 'pointer'
     },
     encoding: {
       shape: { field: 'feature', type: 'geojson' },
-      color: {
-        field: 'total_count',
-        type: 'quantitative',
-        title: 'Threatened Species Count',
-        scale: {
-          type: 'threshold',
-          domain: [20, 50, 100, 150, 200, 250],
-          range: ['#e8f5e9', '#a5d6a7', '#66bb6a', '#fdd835', '#ffb300', '#ff8f00', '#f57c00']
-        },
-        legend: {
-          orient: 'bottom-right',
-          direction: 'vertical',
-          titleFontSize: 13,
-          titleFontWeight: 600,
-          labelFontSize: 11,
-          symbolSize: 200,
-          symbolType: 'square',
-          labelExpr: 'datum.value === 20 ? "< 20" : datum.value === 50 ? "20-50" : datum.value === 100 ? "50-100" : datum.value === 150 ? "100-150" : datum.value === 200 ? "150-200" : datum.value === 250 ? "200-250" : "250+"'
-        }
-      },
       tooltip: [
         { field: 'state', type: 'nominal', title: 'State' },
         { field: 'total_count', type: 'quantitative', title: 'Total Species', format: ',.0f' }
-      ],
-      opacity: {
-        value: 0.95
-      }
+      ]
     },
     config: {
       background: 'transparent',
