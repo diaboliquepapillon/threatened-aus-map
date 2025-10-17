@@ -53,7 +53,7 @@ const Index = () => {
         groupby: ['properties.STE_NAME21', 'type', 'geometry']
       }
     ],
-    projection: { type: 'mercator', center: [133, -28], scale: 560 },
+    projection: { type: 'mercator', center: [134, -26], scale: 650, clipExtent: [[0, 0], [1200, 500]] },
     mark: { type: 'geoshape', stroke: '#666', strokeWidth: 0.8 },
     encoding: {
       color: {
