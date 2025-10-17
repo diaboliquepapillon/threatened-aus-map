@@ -32,29 +32,33 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Test with point chart to verify basic functionality
+  // Try geoshape with different approach - using layer
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    title: 'Test Points - Should show dots',
+    title: 'Threatened Species in Australia',
     width: 800,
     height: 500,
+    projection: { type: 'equalEarth' },
     data: {
-      values: [
-        { x: 100, y: 200, name: 'Sydney' },
-        { x: 200, y: 150, name: 'Melbourne' },
-        { x: 300, y: 100, name: 'Brisbane' }
-      ]
+      url: `${baseUrl}australia.json`,
+      format: { type: 'json', property: 'features' }
     },
-    mark: 'circle',
-    encoding: {
-      x: { field: 'x', type: 'quantitative' },
-      y: { field: 'y', type: 'quantitative' },
-      size: { value: 100 },
-      color: { value: 'red' },
-      tooltip: [
-        { field: 'name', type: 'nominal', title: 'City' }
-      ]
-    }
+    layer: [
+      {
+        mark: { 
+          type: 'geoshape', 
+          stroke: 'white', 
+          strokeWidth: 0.5, 
+          fill: '#e0e0e0'
+        },
+        encoding: {
+          shape: { field: 'geometry', type: 'geojson' },
+          tooltip: [
+            { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
+          ]
+        }
+      }
+    ]
   };
   // Handle map click to update selected state
   const handleMapClick = (stateName: string | null) => {
