@@ -31,65 +31,41 @@ const Index = () => {
 
   // Choropleth Map Specification - Rebuilt from scratch
   const mapSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 500,
-    "layer": [
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
+    width: 'container',
+    height: 500,
+    projection: { type: 'equalEarth' },
+    data: {
+      url: '/threatened_species.csv'
+    },
+    transform: [
+      ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
+      { aggregate: [{ op: 'sum', field: 'count', as: 'species_count' }], groupby: ['state'] },
       {
-        "data": {
-          "url": "australia.json",
-          "format": {"type": "json", "property": "features"}
+        lookup: 'state',
+        from: {
+          data: { url: '/australia.json', format: { type: 'json', property: 'features' } },
+          key: 'properties.STE_NAME21',
+          fields: ['type', 'properties', 'geometry']
         },
-        "projection": {"type": "equalEarth"},
-        "transform": [
-          {
-            "lookup": "properties.STE_NAME21",
-            "from": {
-              "data": {"url": "threatened_species.csv"},
-              "key": "state",
-              "fields": ["count", "group"]
-            },
-            "default": ""
-          },
-          {"filter": selectedGroup !== 'All' ? `datum.group == '${selectedGroup}'` : "datum.count != null"},
-          {
-            "aggregate": [{"op": "sum", "field": "count", "as": "species_count"}],
-            "groupby": ["properties.STE_NAME21"]
-          },
-          {
-            "lookup": "properties.STE_NAME21",
-            "from": {
-              "data": {
-                "url": "australia.json",
-                "format": {"type": "json", "property": "features"}
-              },
-              "key": "properties.STE_NAME21",
-              "fields": ["type", "properties", "geometry"]
-            }
-          }
-        ],
-        "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
-        "encoding": {
-          "color": {
-            "field": "species_count",
-            "type": "quantitative",
-            "scale": {"scheme": "reds"},
-            "legend": {
-              "title": "Threatened Species",
-              "orient": "bottom",
-              "direction": "horizontal",
-              "gradientLength": 300
-            }
-          },
-          "tooltip": [
-            {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"},
-            {"field": "species_count", "type": "quantitative", "title": "Threatened Species"}
-          ]
-        }
+        as: 'feature'
       }
-    ]
+    ],
+    mark: { type: 'geoshape', stroke: '#666', strokeWidth: 0.5 },
+    encoding: {
+      shape: { field: 'feature', type: 'geojson' },
+      color: {
+        field: 'species_count',
+        type: 'quantitative',
+        scale: { scheme: 'reds' },
+        legend: { title: 'Threatened Species', orient: 'bottom', direction: 'horizontal', gradientLength: 300 }
+      },
+      tooltip: [
+        { field: 'state', type: 'nominal', title: 'State' },
+        { field: 'species_count', type: 'quantitative', title: 'Threatened Species', format: ',.0f' }
+      ]
+    }
   };
-
   // Handle map click to update selected state
   const handleMapClick = (stateName: string | null) => {
     if (stateName) {

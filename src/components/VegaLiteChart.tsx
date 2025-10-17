@@ -25,12 +25,12 @@ export const VegaLiteChart = ({ spec, className = "", onStateClick }: VegaLiteCh
         if (onStateClick && result.view) {
           // Listen for clicks on the visualization
           result.view.addEventListener('click', (event: any, item: any) => {
-            const props = item?.datum?.properties ?? {};
             const stateName =
-              props?.STE_NAME21 ??
-              props?.STATE_NAME ??
-              props?.state ??
-              item?.datum?.state ??
+              item?.datum?.feature?.properties?.STE_NAME21 ||
+              item?.datum?.properties?.STE_NAME21 ||
+              item?.datum?.properties?.STATE_NAME ||
+              item?.datum?.properties?.state ||
+              item?.datum?.state ||
               null;
             if (stateName) {
               onStateClick(stateName);
