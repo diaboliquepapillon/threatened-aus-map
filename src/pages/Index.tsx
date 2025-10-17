@@ -73,8 +73,8 @@ const Index = () => {
         title: 'Threatened Species Count',
         scale: {
           type: 'threshold',
-          domain: [50, 100, 150, 200, 250, 300],
-          range: ['#d4e7d4', '#a8d5a8', '#7fc97f', '#ffd966', '#ffb84d', '#ff8c42', '#d62828']
+          domain: [20, 50, 100, 150, 200, 250],
+          range: ['#e8f5e9', '#a5d6a7', '#66bb6a', '#ffd54f', '#ffb74d', '#ff8a65', '#e57373']
         },
         legend: {
           orient: 'bottom-right',
@@ -84,7 +84,7 @@ const Index = () => {
           labelFontSize: 11,
           symbolSize: 200,
           symbolType: 'square',
-          labelExpr: 'datum.value === 50 ? "< 50" : datum.value === 100 ? "50-100" : datum.value === 150 ? "100-150" : datum.value === 200 ? "150-200" : datum.value === 250 ? "200-250" : datum.value === 300 ? "250-300" : "300+"'
+          labelExpr: 'datum.value === 20 ? "< 20" : datum.value === 50 ? "20-50" : datum.value === 100 ? "50-100" : datum.value === 150 ? "100-150" : datum.value === 200 ? "150-200" : datum.value === 250 ? "200-250" : "250+"'
         }
       },
       tooltip: [
