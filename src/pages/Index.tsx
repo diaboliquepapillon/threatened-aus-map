@@ -32,28 +32,32 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Basic working map first
+  // Map with data using layer approach
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     title: 'Threatened Species in Australia',
     width: 800,
     height: 500,
     projection: { type: 'equalEarth' },
-    data: {
-      url: `${baseUrl}australia_topo.json`,
-      format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
-    },
-    mark: { 
-      type: 'geoshape', 
-      stroke: 'white', 
-      strokeWidth: 0.5,
-      fill: '#e0e0e0'
-    },
-    encoding: {
-      tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
-      ]
-    }
+    layer: [
+      {
+        data: {
+          url: `${baseUrl}australia_topo.json`,
+          format: { type: 'topojson', feature: 'STE_2021_AUST_GDA2020' }
+        },
+        mark: { 
+          type: 'geoshape', 
+          stroke: 'white', 
+          strokeWidth: 0.5,
+          fill: '#e0e0e0'
+        },
+        encoding: {
+          tooltip: [
+            { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
+          ]
+        }
+      }
+    ]
   };
   // Handle map click to update selected state
   const handleMapClick = (stateName: string | null) => {
