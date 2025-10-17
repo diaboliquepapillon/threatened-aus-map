@@ -49,7 +49,7 @@ const Index = () => {
         lookup: 'state',
         from: {
           data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
-          key: 'properties.state'
+          key: 'properties.STE_NAME21'
         },
         as: 'feature'
       }
