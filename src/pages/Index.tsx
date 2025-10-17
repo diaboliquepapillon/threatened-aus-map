@@ -38,39 +38,37 @@ const Index = () => {
     width: 'container',
     height: 500,
     data: {
-      url: 'threatened_species.csv',
+      url: 'australia.json',
+      format: { type: 'json', property: 'features' }
     },
     transform: [
       {
-        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['state']
+        lookup: 'properties.STE_NAME21',
+        from: {
+          data: { url: 'threatened_species.csv' },
+          key: 'state',
+          fields: ['count']
+        }
       },
       {
-        lookup: 'state',
-        from: {
-          data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
-          key: 'properties.STE_NAME21'
-        },
-        as: 'feature'
+        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
+        groupby: ['properties.STE_NAME21', 'type', 'geometry']
       }
     ],
     projection: {
       type: 'equirectangular',
       center: [133, -28],
-      scale: 450,
-      translate: [0, 0]
+      scale: 500
     },
     mark: {
       type: 'geoshape',
       stroke: '#000000',
-      strokeWidth: 2,
-      fill: '#ffffff',
-      cursor: 'pointer'
+      strokeWidth: 1.5,
+      fill: '#ffffff'
     },
     encoding: {
-      shape: { field: 'feature', type: 'geojson' },
       tooltip: [
-        { field: 'state', type: 'nominal', title: 'State' },
+        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' },
         { field: 'total_count', type: 'quantitative', title: 'Total Species', format: ',.0f' }
       ]
     },
