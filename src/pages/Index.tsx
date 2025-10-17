@@ -40,10 +40,12 @@ const Index = () => {
     height: 500,
     projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`
+      url: `${baseUrl}australia.json`,
+      format: { type: 'json', property: 'features' }
     },
     mark: { type: 'geoshape', stroke: 'white', strokeWidth: 0.5, fill: '#e0e0e0' },
     encoding: {
+      shape: { field: 'geometry', type: 'geojson' },
       tooltip: [
         { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
       ]
