@@ -46,7 +46,7 @@ const Index = () => {
 
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    title: 'Threatened Species in Australia',
+    title: 'Threatened Species Distribution in Australia',
     width: 800,
     height: 500,
     projection: { type: 'equalEarth' },
