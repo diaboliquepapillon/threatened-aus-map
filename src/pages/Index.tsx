@@ -46,14 +46,13 @@ const Index = () => {
         from: {
           data: { url: '/australia.json', format: { type: 'json', property: 'features' } },
           key: 'properties.STE_NAME21',
-          fields: ['type', 'properties', 'geometry']
-        },
-        as: 'feature'
+          fields: ['geometry']
+        }
       }
     ],
     mark: { type: 'geoshape', stroke: '#666', strokeWidth: 0.5 },
     encoding: {
-      shape: { field: 'feature', type: 'geojson' },
+      shape: { field: 'geometry', type: 'geojson' },
       color: {
         field: 'species_count',
         type: 'quantitative',
