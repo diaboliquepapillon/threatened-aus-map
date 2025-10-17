@@ -6,6 +6,8 @@ interface GroupedBarChartProps {
 }
 
 export const GroupedBarChart = ({ selectedGroup, selectedStateName }: GroupedBarChartProps) => {
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
@@ -20,7 +22,7 @@ export const GroupedBarChart = ({ selectedGroup, selectedStateName }: GroupedBar
       color: '#4b6043',
     },
     data: {
-      url: 'threatened_species.csv',
+      url: `${baseUrl}threatened_species.csv`,
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),

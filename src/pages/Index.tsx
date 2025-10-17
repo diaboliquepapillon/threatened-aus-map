@@ -13,6 +13,9 @@ import { MapPin, TrendingDown, AlertTriangle, ShieldAlert, Waves, Map, BarChart3
 const Index = () => {
   const [selectedGroup, setSelectedGroup] = useState<string>('All');
   const [selectedState, setSelectedState] = useState<string | null>(null);
+  
+  // Base path for data files (handles both dev and production)
+  const baseUrl = import.meta.env.BASE_URL || '/';
 
   // State name mapping
   const stateNameMap: Record<string, string> = {
@@ -36,7 +39,7 @@ const Index = () => {
     height: 500,
     projection: { type: 'equalEarth' },
     data: {
-      url: '/threatened_species.csv'
+      url: `${baseUrl}threatened_species.csv`
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
@@ -44,7 +47,7 @@ const Index = () => {
       {
         lookup: 'state',
         from: {
-          data: { url: '/australia.json', format: { type: 'json', property: 'features' } },
+          data: { url: `${baseUrl}australia.json`, format: { type: 'json', property: 'features' } },
           key: 'properties.STE_NAME21',
           fields: ['geometry']
         }
@@ -93,7 +96,7 @@ const Index = () => {
       color: '#4b6043',
     },
     data: {
-      url: '/threatened_species.csv',
+      url: `${baseUrl}threatened_species.csv`,
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),

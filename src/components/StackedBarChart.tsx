@@ -6,6 +6,8 @@ interface StackedBarChartProps {
 }
 
 export const StackedBarChart = ({ selectedGroup, selectedStateName }: StackedBarChartProps) => {
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
@@ -18,7 +20,7 @@ export const StackedBarChart = ({ selectedGroup, selectedStateName }: StackedBar
       color: '#4b6043',
     },
     data: {
-      url: 'threatened_species.csv',
+      url: `${baseUrl}threatened_species.csv`,
     },
     transform: [
       ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
