@@ -34,76 +34,22 @@ const Index = () => {
   
   // Choropleth Map Specification (CSV aggregate -> GeoJSON lookup)
   const mapSpec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    width: 'container',
-    height: 500,
-    params: [
-      {
-        name: 'zoom',
-        bind: 'scales'
-      }
-    ],
-    data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
-    transform: [
-      {
-        lookup: 'properties.STE_NAME21',
-        from: {
-          data: { 
-            url: 'threatened_species.csv',
-            format: { type: 'csv' }
-          },
-          key: 'state',
-          fields: ['count', 'group']
-        },
-        as: ['count', 'group']
-      },
-      ...(selectedGroup !== 'All' ? [{ filter: `datum.group == '${selectedGroup}'` }] : []),
-      {
-        joinaggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['properties.STE_NAME21']
-      }
-    ],
-    projection: { type: 'equalEarth', center: [134, -26], scale: 650 },
-    layer: [
-      {
-        mark: { 
-          type: 'geoshape', 
-          stroke: '#e0e0e0', 
-          strokeWidth: 0.5,
-          strokeOpacity: 0.3
-        },
-        encoding: {
-          color: {
-            field: 'total_count',
-            type: 'quantitative',
-            scale: {
-              type: 'quantize',
-              domain: [0, 700],
-              range: ['#fffef0', '#fee5b8', '#fdbe85', '#fd8d3c', '#e6550d', '#bd0026', '#7f0000']
-            },
-            legend: {
-              title: 'Threatened Species Count',
-              orient: 'bottom-right',
-              direction: 'vertical',
-              labelFontSize: 10,
-              titleFontSize: 11,
-              titleFontWeight: 600,
-              symbolType: 'square',
-              symbolSize: 200,
-              labelExpr: 'datum.value === 0 ? "0–100" : datum.value === 100 ? "100–200" : datum.value === 200 ? "200–300" : datum.value === 300 ? "300–400" : datum.value === 400 ? "400–500" : datum.value === 500 ? "500–600" : "600+"',
-              values: [0, 100, 200, 300, 400, 500, 600]
-            }
-          },
-          tooltip: [
-            { field: 'properties.STE_NAME21', type: 'nominal', title: 'Region' },
-            { field: 'total_count', type: 'quantitative', title: 'Species Count', format: ',.0f' }
-          ]
-        }
-      }
-    ],
-    config: { 
-      background: '#fafaf5',
-      view: { stroke: null }
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 500,
+    "data": {
+      "url": "australia.json",
+      "format": {"type": "json", "property": "features"}
+    },
+    "projection": {"type": "equalEarth"},
+    "mark": "geoshape",
+    "encoding": {
+      "color": {"value": "#fdd8b8"},
+      "stroke": {"value": "#666"},
+      "strokeWidth": {"value": 0.5},
+      "tooltip": [
+        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"}
+      ]
     }
   };
 
