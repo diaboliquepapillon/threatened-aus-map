@@ -32,27 +32,23 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Choropleth Map Specification - Try different approach
+  // Test with simple bar chart first to verify Vega-Lite works
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
-    title: 'Threatened Species in Australia',
+    title: 'Test Chart - Should show bars',
     width: 800,
     height: 500,
-    projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`
-    },
-    mark: { 
-      type: 'geoshape', 
-      stroke: 'white', 
-      strokeWidth: 0.5, 
-      fill: '#e0e0e0'
-    },
-    encoding: {
-      shape: { field: 'geometry', type: 'geojson' },
-      tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' }
+      values: [
+        { state: 'NSW', count: 100 },
+        { state: 'VIC', count: 80 },
+        { state: 'QLD', count: 120 }
       ]
+    },
+    mark: 'bar',
+    encoding: {
+      x: { field: 'state', type: 'nominal' },
+      y: { field: 'count', type: 'quantitative' }
     }
   };
   // Handle map click to update selected state
@@ -216,7 +212,7 @@ const Index = () => {
         <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
           <VegaLiteChart spec={mapSpec} onStateClick={handleMapClick} />
           <p className="text-xs text-muted-foreground italic text-center mt-4">
-            Hover over states to see species counts • Click to filter other visualizations
+            Hover over states to see species counts • Click to filter other visualisations
           </p>
         </div>
       </section>
@@ -235,7 +231,7 @@ const Index = () => {
           <div className="bg-card rounded-xl p-6 lg:p-8 shadow-lg border border-border hover:shadow-xl transition-shadow">
             <StackedBarChart selectedGroup={selectedGroup} selectedStateName={selectedStateFull} />
             <p className="text-xs text-muted-foreground italic text-center mt-4">
-              Normalized view showing threat composition by state
+              Normalised view showing threat composition by state
             </p>
           </div>
 
@@ -310,7 +306,7 @@ const Index = () => {
             {selectedState ? `Conservation Snapshot: ${stateNameMap[selectedState] || selectedState}` : 'Key Conservation Insights'}
           </h2>
           <p className="text-muted-foreground">
-            Understanding regional patterns helps prioritize conservation efforts
+            Understanding regional patterns helps prioritise conservation efforts
           </p>
         </div>
 
