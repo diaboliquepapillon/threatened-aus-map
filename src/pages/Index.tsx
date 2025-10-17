@@ -34,13 +34,13 @@ const Index = () => {
   
   // Choropleth Map Specification (CSV aggregate -> GeoJSON lookup)
   const mapSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
     "width": "container",
     "height": 500,
     "projection": {"type": "equalEarth"},
     "data": {
       "url": "australia.json",
-      "format": {"type": "json"}
+      "format": {"type": "json", "property": "features"}
     },
     "transform": [
       {
@@ -48,23 +48,21 @@ const Index = () => {
         "from": {
           "data": {"url": "threatened_species.csv"},
           "key": "state",
-          "fields": ["count", "group"]
+          "fields": ["total_count"],
+          "transform": [
+            ...(selectedGroup !== 'All' ? [{ "filter": `datum.group == '${selectedGroup}'` }] : []),
+            { "aggregate": [{ "op": "sum", "field": "count", "as": "total_count" }], "groupby": ["state"] }
+          ]
         }
-      },
-      ...(selectedGroup !== 'All' ? [{"filter": `datum.group == '${selectedGroup}'`}] : []),
-      {
-        "joinaggregate": [{"op": "sum", "field": "count", "as": "total_count"}],
-        "groupby": ["properties.STE_NAME21"]
       }
     ],
-    "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
+    "mark": {"type": "geoshape", "stroke": "#666", "strokeWidth": 0.5},
     "encoding": {
+      "shape": { "field": "geometry", "type": "geojson" },
       "color": {
         "field": "total_count",
         "type": "quantitative",
-        "scale": {
-          "scheme": "reds"
-        },
+        "scale": { "scheme": "reds" },
         "legend": {
           "title": "Threatened Species Count",
           "orient": "bottom",
@@ -73,8 +71,8 @@ const Index = () => {
         }
       },
       "tooltip": [
-        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State"},
-        {"field": "total_count", "type": "quantitative", "title": "Threatened Species"}
+        {"field": "properties.STE_NAME21", "type": "nominal", "title": "State/Territory"},
+        {"field": "total_count", "type": "quantitative", "title": "Threatened Species", "format": ",.0f"}
       ]
     }
   };
