@@ -37,47 +37,11 @@ const Index = () => {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 500,
-    data: {
-      url: 'australia.json',
-      format: { type: 'json', property: 'features' }
-    },
-    transform: [
-      {
-        lookup: 'properties.STE_NAME21',
-        from: {
-          data: { url: 'threatened_species.csv' },
-          key: 'state',
-          fields: ['count']
-        }
-      },
-      {
-        aggregate: [{ op: 'sum', field: 'count', as: 'total_count' }],
-        groupby: ['properties.STE_NAME21', 'type', 'geometry']
-      }
-    ],
-    projection: {
-      type: 'equirectangular',
-      center: [133, -28],
-      scale: 500
-    },
-    mark: {
-      type: 'geoshape',
-      stroke: '#000000',
-      strokeWidth: 1.5,
-      fill: '#ffffff'
-    },
-    encoding: {
-      tooltip: [
-        { field: 'properties.STE_NAME21', type: 'nominal', title: 'State' },
-        { field: 'total_count', type: 'quantitative', title: 'Total Species', format: ',.0f' }
-      ]
-    },
-    config: {
-      background: 'transparent',
-      view: {
-        stroke: 'transparent'
-      }
-    }
+    data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
+    projection: { type: 'mercator', center: [133, -28], scale: 560 },
+    mark: { type: 'geoshape', stroke: '#000', strokeWidth: 1.6, fill: 'transparent' },
+    encoding: { shape: { field: 'geometry', type: 'geojson' } },
+    config: { background: 'transparent', view: { stroke: 'transparent' } }
   };
 
   // Handle map click to update selected state
