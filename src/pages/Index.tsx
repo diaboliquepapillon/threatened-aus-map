@@ -32,18 +32,22 @@ const Index = () => {
   // Derived state full name for filtering
   const selectedStateFull = selectedState ? stateNameMap[selectedState] : null;
 
-  // Choropleth Map Specification - Test basic map first
+  // Choropleth Map Specification - Try different approach
   const mapSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     title: 'Threatened Species in Australia',
-    width: 'container',
+    width: 800,
     height: 500,
     projection: { type: 'equalEarth' },
     data: {
-      url: `${baseUrl}australia.json`,
-      format: { type: 'json', property: 'features' }
+      url: `${baseUrl}australia.json`
     },
-    mark: { type: 'geoshape', stroke: 'white', strokeWidth: 0.5, fill: '#e0e0e0' },
+    mark: { 
+      type: 'geoshape', 
+      stroke: 'white', 
+      strokeWidth: 0.5, 
+      fill: '#e0e0e0'
+    },
     encoding: {
       shape: { field: 'geometry', type: 'geojson' },
       tooltip: [
@@ -424,7 +428,7 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-8 py-8 max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">FIT3179 Data Visualisation 2</strong> • Monash University • 2025
+              <strong className="text-foreground">FIT3179 Data Visualisation 2</strong> • Monash University • 2025 • <strong>Aylin Vahabova</strong>
             </p>
             <p className="text-sm text-muted-foreground">
               Created with Vega-Lite, React, and Tailwind CSS
