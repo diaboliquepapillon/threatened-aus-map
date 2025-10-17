@@ -61,8 +61,8 @@ const Index = () => {
     },
     mark: {
       type: 'geoshape',
-      stroke: '#666',
-      strokeWidth: 1,
+      stroke: '#333',
+      strokeWidth: 0.5,
       cursor: 'pointer'
     },
     encoding: {
@@ -70,27 +70,36 @@ const Index = () => {
       color: {
         field: 'total_count',
         type: 'quantitative',
-        title: 'Threatened Species',
+        title: 'Threatened Species Count',
         scale: {
-          scheme: 'orangered',
-          domainMin: 0
+          type: 'threshold',
+          domain: [50, 100, 150, 200, 250, 300],
+          range: ['#d4e7d4', '#a8d5a8', '#7fc97f', '#ffd966', '#ffb84d', '#ff8c42', '#d62828']
         },
         legend: {
-          format: ',.0f',
-          titleFontSize: 12,
-          labelFontSize: 11
+          orient: 'bottom-right',
+          direction: 'vertical',
+          titleFontSize: 13,
+          titleFontWeight: 600,
+          labelFontSize: 11,
+          symbolSize: 200,
+          symbolType: 'square',
+          labelExpr: 'datum.value === 50 ? "< 50" : datum.value === 100 ? "50-100" : datum.value === 150 ? "100-150" : datum.value === 200 ? "150-200" : datum.value === 250 ? "200-250" : datum.value === 300 ? "250-300" : "300+"'
         }
       },
       tooltip: [
         { field: 'state', type: 'nominal', title: 'State' },
-        { field: 'total_count', type: 'quantitative', title: 'Species Count', format: ',.0f' }
+        { field: 'total_count', type: 'quantitative', title: 'Total Species', format: ',.0f' }
       ],
       opacity: {
-        value: 0.9
+        value: 0.95
       }
     },
     config: {
-      background: 'transparent'
+      background: 'transparent',
+      view: {
+        stroke: 'transparent'
+      }
     }
   };
 
