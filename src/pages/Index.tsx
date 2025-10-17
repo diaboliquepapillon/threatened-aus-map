@@ -37,6 +37,12 @@ const Index = () => {
     $schema: 'https://vega.github.io/schema/vega-lite/v6.4.1.json',
     width: 'container',
     height: 500,
+    params: [
+      {
+        name: 'zoom',
+        bind: 'scales'
+      }
+    ],
     data: { url: 'australia.json', format: { type: 'json', property: 'features' } },
     transform: [
       {
