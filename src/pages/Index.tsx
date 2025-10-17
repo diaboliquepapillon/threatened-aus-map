@@ -48,17 +48,19 @@ const Index = () => {
         "from": {
           "data": {"url": "threatened_species.csv"},
           "key": "state",
-          "fields": ["total_count"],
-          "transform": [
-            ...(selectedGroup !== 'All' ? [{ "filter": `datum.group == '${selectedGroup}'` }] : []),
-            { "aggregate": [{ "op": "sum", "field": "count", "as": "total_count" }], "groupby": ["state"] }
-          ]
-        }
+          "fields": ["count", "group"]
+        },
+        "as": ["row_count", "row_group"]
+      },
+      { "flatten": ["row_count", "row_group"] },
+      ...(selectedGroup !== 'All' ? [{"filter": `datum.row_group == '${selectedGroup}'`}] : []),
+      {
+        "aggregate": [{"op": "sum", "field": "row_count", "as": "total_count"}],
+        "groupby": ["properties.STE_NAME21"]
       }
     ],
     "mark": {"type": "geoshape", "stroke": "#666", "strokeWidth": 0.5},
     "encoding": {
-      "shape": { "field": "geometry", "type": "geojson" },
       "color": {
         "field": "total_count",
         "type": "quantitative",
